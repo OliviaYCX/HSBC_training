@@ -1,4 +1,5 @@
 import datetime
+import random
 
 class Customer:
     def __init__(self, customer_id, name, initial_balance):
@@ -115,6 +116,16 @@ class Transaction:
     def get_date(self):
         return self.__date.strftime('%Y-%m-%d %H:%M:%S')
 
+def generate_10_digit_number():
+    return random.randint(10**9, 10**10 - 1)
+
+def generate_account_id():
+    # Implement a unique account ID generator logic
+    return generate_10_digit_number()
+
+def generate_transaction_id():
+    # Implement a unique transaction ID generator logic
+    return generate_10_digit_number()
 
 # Main program
 if __name__ == "__main__":
