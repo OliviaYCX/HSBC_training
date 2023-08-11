@@ -88,6 +88,33 @@ class BankModule:
     def last_10_transactions(account):
         return account.last_10_transactions()
 
+class Transaction:
+    def __init__(self, amount, transaction_type, available_balance, description):
+        self.__transaction_id = generate_transaction_id()  # Private method to generate transaction ID
+        self.__amount = amount
+        self.__transaction_type = transaction_type
+        self.__available_balance = available_balance
+        self.__description = description
+        self.__date = datetime.datetime.now()
+
+    def get_transaction_id(self):
+        return self.__transaction_id
+
+    def get_amount(self):
+        return self.__amount
+
+    def get_transaction_type(self):
+        return self.__transaction_type
+
+    def get_available_balance(self):
+        return self.__available_balance
+
+    def get_description(self):
+        return self.__description
+
+    def get_date(self):
+        return self.__date.strftime('%Y-%m-%d %H:%M:%S')
+
 
 # Main program
 if __name__ == "__main__":
