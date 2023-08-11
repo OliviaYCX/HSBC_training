@@ -127,7 +127,48 @@ def generate_transaction_id():
     # Implement a unique transaction ID generator logic
     return generate_10_digit_number()
 
+
+class Database:
+    def __init__(self):
+        self.__users = {}
+
+    def login(self):
+        customer_id = input("Enter your customer ID: ")
+        password = input("Enter your password: ")
+
+        user = self.__users.get(customer_id)
+
+        if user is None:
+            print("User not found. Creating a new user.")
+            user = self.__create_user(customer_id)
+
+        if password == user['password']:
+            print("Login successful.")
+            return user['customer']
+        else:
+            print("Incorrect password.")
+            return None
+
+    def __create_user(self, customer_id):
+        name = input("Enter your name: ")
+        initial_balance = float(input("Enter initial balance: "))
+        password = input("Create a password: ")
+
+        customer = Customer(customer_id, name, initial_balance)
+        self.__users[customer_id] = {'customer': customer, 'password': password}
+
+        print("User created successfully.")
+        return {'customer': customer, 'password': password}
+
+
 # Main program
 if __name__ == "__main__":
-    # Handle input and output here
-    pass
+    bank_database = Database()
+    user = bank_database.login()
+
+    if user:
+        print(f"Welcome, {user.get_name()}!")
+        # Handle banking operations here using the BankModule
+
+
+
