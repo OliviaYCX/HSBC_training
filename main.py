@@ -44,6 +44,51 @@ class Account:
     def get_account_id(self):
         return self.__account_id
 
+
+class BankModule:
+    @staticmethod
+    def withdraw(account, amount):
+        if amount <= 0:
+            return "Invalid withdrawal amount."
+        if account.get_balance() - amount < 0:
+            return "Insufficient funds."
+        transaction = Transaction(amount, 'Debit', account.get_balance() - amount, 'Withdrawal')
+        account._Account__balance -= amount
+        account._Account__add_transaction(transaction)
+        return transaction
+
+    @staticmethod
+    def deposit(account, amount):
+        if amount <= 0:
+            return "Invalid deposit amount."
+        transaction = Transaction(amount, 'Credit', account.get_balance() + amount, 'Deposit')
+        account._Account__balance += amount
+        account._Account__add_transaction(transaction)
+        return transaction
+
+    @staticmethod
+    def transfer(source_account, destination_account, amount):
+        if amount <= 0:
+            return "Invalid transfer amount."
+        if source_account.get_balance() - amount < 0:
+            return "Insufficient funds for transfer."
+        transaction = Transaction(amount, 'Debit', source_account.get_balance() - amount, f'Transfer to {destination_account.get_account_id()}')
+        destination_transaction = Transaction(amount, 'Credit', destination_account.get_balance() + amount, f'Transfer from {source_account.get_account_id()}')
+        source_account._Account__balance -= amount
+        destination_account._Account__balance += amount
+        source_account._Account__add_transaction(transaction)
+        destination_account._Account__add_transaction(destination_transaction)
+        return transaction
+
+    @staticmethod
+    def show_balance(account):
+        return account.get_balance()
+
+    @staticmethod
+    def last_10_transactions(account):
+        return account.last_10_transactions()
+
+
 # Main program
 if __name__ == "__main__":
     # Handle input and output here
