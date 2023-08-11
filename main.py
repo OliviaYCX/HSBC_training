@@ -8,6 +8,7 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
@@ -20,3 +21,5 @@ class WithdrawMoney:
 
 
 
+=======
+>>>>>>> 0573c94899dbb8e575503b3a3584ec4454bc1862
