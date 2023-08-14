@@ -50,9 +50,11 @@ class BankModule:
     @staticmethod
     def withdraw(account, amount):
         if amount <= 0:
-            return "Invalid withdrawal amount."
+            print("> Invalid withdrawal amount.")
+            return
         if account.get_balance() - amount < 0:
-            return "Insufficient funds."
+            print("> Insufficient funds.")
+            return
         transaction = Transaction(amount, 'Debit', account.get_balance() - amount, 'Withdrawal')
         account._Account__balance -= amount
         account._Account__add_transaction(transaction)
@@ -61,7 +63,8 @@ class BankModule:
     @staticmethod
     def deposit(account, amount):
         if amount <= 0:
-            return "Invalid deposit amount."
+            print("> Invalid deposit amount.")
+            return
         transaction = Transaction(amount, 'Credit', account.get_balance() + amount, 'Deposit')
         account._Account__balance += amount
         account._Account__add_transaction(transaction)
@@ -139,8 +142,8 @@ class Database:
         while en!='1' and en!='2':
             en = input("1. Existing User\n2. New User\n>").strip()
 
-        if en == 1:
-            customer_id = input("Enter your customer ID: ")
+        if en == '1':
+            customer_id = int(input("Enter your customer ID: "))
             password = input("Enter your password: ")
             user = self.__users.get(customer_id)
             if user is None:
@@ -148,7 +151,7 @@ class Database:
                 return
             if password == user['password']:
                 print("Login successful.")
-                return user['customer']
+                return user
             else:
                 print("Incorrect password.")
                 return None
@@ -165,8 +168,10 @@ class Database:
 
         customer = Customer(customer_id, name, initial_balance)
         self.__users[customer_id] = {'customer': customer, 'password': password}
-
-        print("User created successfully.")
+        print("\n***********************************************")
+        print(f">You have been assigned Customer ID: {customer_id}")
+        print("***********************************************")
+        print(">User created successfully.\n\n")
         return {'customer': customer, 'password': password}
 
 
@@ -176,6 +181,9 @@ if __name__ == "__main__":
     finalBreak = False
     while not finalBreak:
         user = bank_database.login()
+        if not user:
+            continue
+        print(f"Welcome, {user['customer'].get_name()}!\n")
         while True:
             options = [
                 "Show Balance",
@@ -187,20 +195,44 @@ if __name__ == "__main__":
                 "Quit"
             ]
 
-            print(f"Welcome, {user['customer'].get_name()}!\n\n")
+
             for i in range(len(options)):
-                print(f'{i+1}. {options[i]}\n')
+                print(f'{i+1}. {options[i]}')
             inp = "0"
             while not 0<int(inp)<8:
                 inp = input("\nEnter your option [1-7] :").strip()
 
+            print(f"> You have chosen '{options[int(inp)-1]}'")
             if inp=='7':
                 finalBreak = True
+                print("> System Quitting!")
                 break
             elif inp == '6':
+                print("> Logout successful!")
                 break
             elif inp == '1':
-                print(f"You Current Balance is {user['customer'].get_account.get_balance}")
+                print(f">Your Current Balance is {user['customer'].get_account().get_balance()}")
+            elif inp == '2':
+                print(f"> Your Current Balance is {user['customer'].get_account().get_balance()}")
+                inp = float(input("Enter the amount you want to withdraw: "))
+                user['customer'].get_account().withdraw(inp)
+                print(f"> Your Current Balance after withdrawal is {user['customer'].get_account().get_balance()}\n\n")
+            elif inp == '3':
+                print(f"> Your Current Balance is {user['customer'].get_account().get_balance()}")
+                inp = float(input("Enter the amount you want to deposit: "))
+                user['customer'].get_account().deposit(inp)
+                print(f"> Your Current Balance after withdrawal is {user['customer'].get_account().get_balance()}\n\n")
+            elif inp == '4':
+                desAcc = self.__users.get(int(input("> Enter the account number you want to deposit the money into: ")))
+                while desAcc is None:
+                    print("> User not found!")
+                    desAcc = self.__users.get(int(input("> Enter the account number you want to deposit the money into: ")))
+                print(f"> Your Current Balance is {user['customer'].get_account().get_balance()}")
+                inp = float(input("Enter the amount you want to transfer: "))
+                user['customer'].get_account().deposit(inp)
+            elif inp == '5':
+
+
 
 
 
