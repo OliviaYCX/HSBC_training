@@ -133,25 +133,34 @@ class Database:
         self.__users = {}
 
     def login(self):
-        customer_id = input("Enter your customer ID: ")
-        password = input("Enter your password: ")
 
-        user = self.__users.get(customer_id)
+        en =""
 
-        if user is None:
-            print("User not found. Creating a new user.")
-            user = self.__create_user(customer_id)
+        while en!='1' and en!='2':
+            en = input("1. Existing User\n2. New User\n>").strip()
 
-        if password == user['password']:
-            print("Login successful.")
-            return user['customer']
+        if en == 1:
+            customer_id = input("Enter your customer ID: ")
+            password = input("Enter your password: ")
+            user = self.__users.get(customer_id)
+            if user is None:
+                print("User not found.\nAlert: System Closing!")
+                return
+            if password == user['password']:
+                print("Login successful.")
+                return user['customer']
+            else:
+                print("Incorrect password.")
+                return None
         else:
-            print("Incorrect password.")
-            return None
+            return self.__create_user(generate_account_id())
 
     def __create_user(self, customer_id):
         name = input("Enter your name: ")
+        initial_balance = "P"
+        # while not initial_balance.isdigit():
         initial_balance = float(input("Enter initial balance: "))
+
         password = input("Create a password: ")
 
         customer = Customer(customer_id, name, initial_balance)
@@ -164,11 +173,35 @@ class Database:
 # Main program
 if __name__ == "__main__":
     bank_database = Database()
-    user = bank_database.login()
+    finalBreak = False
+    while not finalBreak:
+        user = bank_database.login()
+        while True:
+            options = [
+                "Show Balance",
+                "Withdraw Money",
+                "Deposit Money",
+                "Transfer Funds",
+                "Display Last 10 Transactions",
+                "Log Out",
+                "Quit"
+            ]
 
-    if user:
-        print(f"Welcome, {user.get_name()}!")
+            print(f"Welcome, {user['customer'].get_name()}!\n\n")
+            for i in range(len(options)):
+                print(f'{i+1}. {options[i]}\n')
+            inp = "0"
+            while not 0<int(inp)<8:
+                inp = input("\nEnter your option [1-7] :").strip()
+
+            if inp=='7':
+                finalBreak = True
+                break
+            elif inp == '6':
+                break
+            elif inp == '1':
+                print(f"You Current Balance is {user['customer'].get_account.get_balance}")
+
+
+
         # Handle banking operations here using the BankModule
-
-
-
